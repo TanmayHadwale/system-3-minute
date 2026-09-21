@@ -1,0 +1,428 @@
+@import "tailwindcss";
+
+/* ─── Theme tokens ─────────────────────────────────────────────── */
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --color-dark:         #0f172a;
+  --color-darker:       #020617;
+  --color-accent:       #06b6d4;
+  --color-accent-dim:   #0891b2;
+  --color-accent-glow:  rgba(6, 182, 212, 0.35);
+  --color-green:        #22c55e;
+  --color-green-glow:   rgba(34, 197, 94, 0.35);
+  --color-red:          #ef4444;
+  --color-orange:       #f97316;
+  --color-yellow:       #eab308;
+}
+
+/* ─── Base ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--color-darker);
+  color: #e2e8f0;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* ─── Glass panels ──────────────────────────────────────────────── */
+.glass {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.glass-panel {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── CRT / Scanline overlay ─────────────────────────────────────── */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.06) 2px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+  z-index: 9998;
+}
+
+@keyframes scanline-move {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+.scanline {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 8vh;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(6, 182, 212, 0.06) 50%,
+    transparent 100%
+  );
+  animation: scanline-move 10s linear infinite;
+  z-index: 9997;
+}
+
+/* ─── Neon border glow ────────────────────────────────────────────── */
+.neon-border {
+  border: 1px solid var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent-glow),
+              inset 0 0 8px rgba(6,182,212,0.05);
+}
+.neon-border-green {
+  border: 1px solid var(--color-green);
+  box-shadow: 0 0 8px var(--color-green-glow),
+              inset 0 0 8px rgba(34,197,94,0.05);
+}
+
+/* ─── Text glow ───────────────────────────────────────────────────── */
+.text-glow-cyan  { text-shadow: 0 0 12px rgba(6, 182, 212, 0.7); }
+.text-glow-green { text-shadow: 0 0 12px rgba(34, 197, 94, 0.7); }
+.text-glow-red   { text-shadow: 0 0 12px rgba(239, 68, 68, 0.7); }
+
+/* ─── Animated grid background ───────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── Particle canvas (landing) ─────────────────────────────────── */
+.particle-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ─── 3D card tilt ───────────────────────────────────────────────── */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease;
+  will-change: transform;
+}
+
+/* ─── Button styles ──────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dim));
+  color: #000;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px var(--color-accent-glow);
+  transition: box-shadow 0.2s, transform 0.1s;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 35px var(--color-accent-glow);
+  transform: translateY(-1px);
+}
+.btn-primary:active  { transform: translateY(1px); box-shadow: none; }
+
+.btn-secondary {
+  background: transparent;
+  color: #94a3b8;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  border: 1px solid #334155;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); background: rgba(6,182,212,0.05); }
+
+.btn-danger {
+  background: transparent;
+  color: var(--color-red);
+  border: 1px solid var(--color-red);
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  transition: background 0.2s;
+}
+.btn-danger:hover { background: rgba(239,68,68,0.1); }
+
+/* ─── Module status badges ───────────────────────────────────────── */
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+.badge-active   { background: rgba(6,182,212,0.15);  color: var(--color-accent); border: 1px solid rgba(6,182,212,0.4); }
+.badge-restored { background: rgba(34,197,94,0.15); color: var(--color-green);  border: 1px solid rgba(34,197,94,0.4); }
+.badge-locked   { background: rgba(100,116,139,0.1); color: #64748b;            border: 1px solid rgba(100,116,139,0.3); }
+.badge-warning  { background: rgba(234,179,8,0.1);   color: var(--color-yellow); border: 1px solid rgba(234,179,8,0.3); }
+
+/* ─── Puzzle input ────────────────────────────────────────────────── */
+.puzzle-input {
+  background: rgba(2, 6, 23, 0.8);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  caret-color: var(--color-accent);
+}
+.puzzle-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent-glow);
+}
+.puzzle-input::placeholder { color: #334155; }
+.puzzle-input.success { border-color: var(--color-green); box-shadow: 0 0 12px var(--color-green-glow); }
+.puzzle-input.error   { border-color: var(--color-red);   box-shadow: 0 0 8px rgba(239,68,68,0.3); }
+
+/* ─── Code block ─────────────────────────────────────────────────── */
+.code-block {
+  background: rgba(2, 6, 23, 0.9);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: #94a3b8;
+}
+.code-blank {
+  color: var(--color-accent);
+  background: rgba(6,182,212,0.1);
+  padding: 0 4px;
+  border-radius: 2px;
+  border-bottom: 2px solid var(--color-accent);
+  animation: blink-cursor 1.2s step-end infinite;
+}
+@keyframes blink-cursor { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+/* ─── Terminal ───────────────────────────────────────────────────── */
+.terminal-wrap {
+  background: rgba(2, 6, 23, 0.95);
+  border: 1px solid rgba(6,182,212,0.2);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.terminal-line { line-height: 1.6; }
+.terminal-prompt { color: var(--color-accent); }
+.terminal-output { color: #94a3b8; }
+.terminal-success { color: var(--color-green); }
+.terminal-error   { color: var(--color-red); }
+
+/* ─── Log entries ────────────────────────────────────────────────── */
+.log-entry { 
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.log-entry.highlighted {
+  background: rgba(6,182,212,0.07);
+  border-left: 3px solid var(--color-accent);
+  padding-left: 12px;
+  border-radius: 2px;
+}
+.log-time { color: #475569; margin-right: 12px; }
+.log-text  { color: #94a3b8; }
+.log-text.highlight-text { color: var(--color-accent); font-weight: 600; }
+
+/* ─── Sequence puzzle ────────────────────────────────────────────── */
+.seq-number {
+  width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(6,182,212,0.08);
+  border: 1px solid rgba(6,182,212,0.3);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.seq-arrow {
+  color: #334155;
+  font-size: 1.2rem;
+  padding: 0 4px;
+}
+.seq-blank {
+  width: 60px; height: 60px;
+  background: rgba(6,182,212,0.04);
+  border: 2px dashed rgba(6,182,212,0.5);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: #334155;
+  font-size: 1.2rem;
+}
+
+/* ─── Progress bar ───────────────────────────────────────────────── */
+.progress-bar-wrap {
+  background: rgba(15,23,42,0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  height: 6px;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* ─── Animations ─────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes slideDown {
+  from { transform: translateY(-16px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-6px); }
+  40%     { transform: translateX(6px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
+}
+@keyframes pulse-glow {
+  0%,100% { box-shadow: 0 0 10px var(--color-accent-glow); }
+  50%     { box-shadow: 0 0 25px var(--color-accent-glow), 0 0 50px rgba(6,182,212,0.15); }
+}
+@keyframes pulse-glow-green {
+  0%,100% { box-shadow: 0 0 10px var(--color-green-glow); }
+  50%     { box-shadow: 0 0 30px var(--color-green-glow), 0 0 60px rgba(34,197,94,0.15); }
+}
+@keyframes pulse-red {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.6; }
+}
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+@keyframes core-spin {
+  from { transform: rotateY(0deg) rotateX(15deg); }
+  to   { transform: rotateY(360deg) rotateX(15deg); }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-8px); }
+}
+@keyframes restoration-fill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+@keyframes type-cursor {
+  0%,100% { opacity:1; } 50% { opacity:0; }
+}
+
+.animate-fade-in  { animation: fadeIn  0.35s ease-out both; }
+.animate-slide-up { animation: slideUp 0.35s ease-out both; }
+.animate-slide-down { animation: slideDown 0.3s ease-out both; }
+.animate-scale-in { animation: scaleIn 0.3s ease-out both; }
+.animate-shake    { animation: shake   0.35s ease-in-out; }
+.animate-float    { animation: float   3s ease-in-out infinite; }
+.animate-pulse-glow       { animation: pulse-glow       2s ease-in-out infinite; }
+.animate-pulse-glow-green { animation: pulse-glow-green 2s ease-in-out infinite; }
+.animate-pulse-red        { animation: pulse-red        1s ease-in-out infinite; }
+
+/* ─── Landing page specific ──────────────────────────────────────── */
+.landing-bg {
+  background: radial-gradient(ellipse at 50% 30%, rgba(6,182,212,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 80%, rgba(99,102,241,0.05) 0%, transparent 50%),
+              var(--color-darker);
+}
+
+.landing-title {
+  font-family: var(--font-mono);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 50%, #a5f3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(6,182,212,0.4));
+}
+
+.system-core-orb {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+    rgba(6,182,212,0.9) 0%,
+    rgba(6,182,212,0.4) 40%,
+    rgba(6,182,212,0.1) 70%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 30px rgba(6,182,212,0.6),
+    0 0 80px rgba(6,182,212,0.3),
+    0 0 150px rgba(6,182,212,0.1);
+  animation: float 3s ease-in-out infinite, pulse-glow 2s ease-in-out infinite;
+}
+
+/* ─── Stability bar ──────────────────────────────────────────────── */
+.stability-fill-high   { background: linear-gradient(90deg, #22c55e, #4ade80); }
+.stability-fill-medium { background: linear-gradient(90deg, #eab308, #facc15); }
+.stability-fill-low    { background: linear-gradient(90deg, #ef4444, #f97316); }
+
+/* ─── Clue card ──────────────────────────────────────────────────── */
+.clue-card {
+  background: rgba(6,182,212,0.05);
+  border: 1px solid rgba(6,182,212,0.25);
+  border-radius: 4px;
+  padding: 6px 10px;
+  animation: slideUp 0.3s ease-out both;
+}
+
+/* ─── Win / lose screen ──────────────────────────────────────────── */
+.win-panel {
+  border: 2px solid var(--color-green);
+  box-shadow: 0 0 40px var(--color-green-glow), inset 0 0 40px rgba(34,197,94,0.03);
+}
+.lose-panel {
+  border: 2px solid var(--color-red);
+  box-shadow: 0 0 40px rgba(239,68,68,0.3), inset 0 0 40px rgba(239,68,68,0.03);
+}
+
+/* ─── Responsive tweaks ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .dashboard-sidebar { display: none; }
+  .dashboard-main    { padding: 1rem; }
+}
