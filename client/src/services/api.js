@@ -1,4 +1,4 @@
-const API_BASE = 'https://system-3-minute.onrender.com/';
+const API_BASE = 'https://system-3-minute.onrender.com/api';
 
 export const api = {
   async registerPlayer(name) {
