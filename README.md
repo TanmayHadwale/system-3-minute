@@ -27,8 +27,7 @@ A full-stack browser game built for a 3-hour hackathon. The interface is the gam
    npm start
    # or for dev mode: npm run dev (nodemon)
    \`\`\`
-   The server will run on http://localhost:3001.
-
+   The server will run on https://system-3-minute.onrender.com/
 ### 2. Frontend Setup
 1. Navigate to the `client` directory:
    \`\`\`bash
@@ -42,10 +41,10 @@ A full-stack browser game built for a 3-hour hackathon. The interface is the gam
    \`\`\`bash
    npm run dev
    \`\`\`
-   The client will run on http://localhost:5173.
+   The client will run on https://system-3-minute.vercel.app/
 
 ### 3. Play
-Open http://localhost:5173 in your browser and attempt to save CORE-IT!
+Open https://system-3-minute.vercel.app/ in your browser and attempt to save CORE-IT!
 
 ## Gameplay Flow
 1. Start the system by entering an operator ID.
